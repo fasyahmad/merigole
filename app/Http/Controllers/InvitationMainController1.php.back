@@ -1,0 +1,146 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use App\Models\InvitationMain;
+use Exception;
+use SebastianBergmann\Environment\Console;
+use Yajra\DataTables\Facades\DataTables;
+
+class InvitationMainController extends Controller
+{
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function index()
+    {
+        if(request()->ajax())
+        {
+            $query = InvitationMain::query();
+
+            return DataTables::of($query)
+                ->addColumn('action', function ($item) {
+                    return '
+                        <a class="inline-block bg-black border border-gray-700 bg-gray-700 text-white rounded-md px-2 py-1 m-1 transition duration-500 ease select-none hover:bg-gray-800 focus:outline-none focus:shadow-outline" 
+                            href="' . route('dashboard.invitation.edit', $item->id) . '">
+                            Edit
+                        </a>
+                        <form class="inline-block" action="' . route('dashboard.invitation.destroy', $item->id) . '" method="POST">
+                        <button class="border border-red-500 bg-red-500 text-white rounded-md px-2 py-1 m-2 transition duration-500 ease select-none hover:bg-red-600 focus:outline-none focus:shadow-outline" >
+                            Delete
+                        </button>
+                            ' . method_field('delete') . csrf_field() . '
+                        </form>
+                        <a class="inline-block border border-gray-700 bg-green bg-green-700 text-white rounded-md px-2 py-1 m-1 transition duration-500 ease select-none hover:bg-gray-800 focus:outline-none focus:shadow-outline" 
+                            href="' . route('dashboard.invitation.show', $item->id) . '">
+                            View
+                        </a>';
+                })
+                // ->editColumn('price', function ($item) {
+                //     return number_format($item->price);
+                // })
+                ->rawColumns(['action'])
+                ->make();
+        }
+        return view('pages.dashboard.invitation.index');
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function create()
+    {
+        //
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function store(Request $request)
+    {
+        //
+    }
+
+    /**
+     * Display the specified resource.
+     *
+     * @param  \App\Models\InvitationMain  $invitationMain
+     * @return \Illuminate\Http\Response
+     */
+    public function show(InvitationMain $invitationMain)
+    {
+        //
+        $url = urlencode ("http://merigole.test/api/invitations?id=1");
+        return json_decode(file_get_contents($url), true);
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     *
+     * @param  \App\Models\InvitationMain  $invitationMain
+     * @return \Illuminate\Http\Response
+     */
+    public function edit(InvitationMain $invitation)
+    {
+        //
+        $invitationData = InvitationMain::with(['guestBooks', 'rsvps','marriageCeremonys', 'weddingReceptions','physicalGifts', 'digitalGifts', 'galleries'])->find($invitation->id);
+        
+        return view('pages.dashboard.invitation.edit', [
+            'item' => $invitationData
+        ]);
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Models\InvitationMain  $invitationMain
+     * @return \Illuminate\Http\Response
+     */
+    public function update(Request $request, InvitationMain $invitationMain)
+    {
+        //
+        //
+        try
+        {
+
+            $invitationMain->update([
+                'nickname_groom'     => $request->nickname_groom,
+                'nickname_bride'     => $request->nickname_bride,
+                'quote'   => $request->quote
+            ]);
+
+
+            $data = $request->all();
+            $invitationMain->update($data);
+
+            return redirect()->route('dashboard.invitation.index')->with('success', 'Invitation has been updated');
+        }catch(Exception $error)
+        {
+            return $error;
+        }
+        
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     *
+     * @param  \App\Models\InvitationMain  $invitationMain
+     * @return \Illuminate\Http\Response
+     */
+    public function destroy(InvitationMain $invitationMain)
+    {
+        //
+        $invitationMain->delete();
+        return redirect()->route('dashboard.invitation.index')->with('success', 'invitation has been deleted');
+    }
+
+}

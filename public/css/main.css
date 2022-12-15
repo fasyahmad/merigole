@@ -1,0 +1,20 @@
+
+/* fixing position DataTable */
+
+#invitation_table_length{
+    padding: 0 1.25rem;
+}
+
+.dataTables_filter{
+    padding: 0 1.25rem;
+}
+
+#invitation_table_info, #invitation_table_paginate{
+    padding: 1.25rem;
+}
+
+table.dataTable thead>tr>th
+{ 
+    text-align: center; 
+}
+/* end fixing position DataTable */
