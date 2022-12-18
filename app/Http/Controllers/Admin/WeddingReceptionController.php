@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\InvitationMain;
 use App\Models\WeddingReception;
 use Illuminate\Http\Request;
 
@@ -68,9 +69,17 @@ class WeddingReceptionController extends Controller
      * @param  \App\Models\WeddingReception  $weddingReception
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, WeddingReception $weddingReception)
+    public function update(Request $request, WeddingReception $weddingReception, $id)
     {
         //
+        $data = $request->all();
+        $dataCeremony = WeddingReception::where('invitation_main_id', $id)->firstOrFail();
+        $dataCeremony->update($data);
+        $invitation = InvitationMain::all();
+
+        return view('pages.admin.invitation.index',[
+            'items' => $invitation
+        ]);
     }
 
     /**

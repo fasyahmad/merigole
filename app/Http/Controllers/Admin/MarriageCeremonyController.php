@@ -72,12 +72,9 @@ class MarriageCeremonyController extends Controller
     public function update(Request $request, MarriageCeremony $marriageCeremony, $id)
     {
         //
-        $id = $request->id;
         $data = $request->all();
-        $item = MarriageCeremony::where('invitation_main_id', $id)->first();
-
-        $item->update($data);
-
+        $dataCeremony = MarriageCeremony::where('invitation_main_id', $id)->firstOrFail();
+        $dataCeremony->update($data);
         $invitation = InvitationMain::all();
 
         return view('pages.admin.invitation.index',[
@@ -85,7 +82,7 @@ class MarriageCeremonyController extends Controller
         ]);
     }
 
-    /**
+    /** 
      * Remove the specified resource from storage.
      *
      * @param  \App\Models\MarriageCeremony  $marriageCeremony

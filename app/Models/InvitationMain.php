@@ -18,7 +18,7 @@ class InvitationMain extends Model
         'marriage_date',
         'background_color',
         'quote',
-        'quote_refererence',
+        'quote_reference',
         'full_name_groom',
         'pics_groom',
         'ig_groom',

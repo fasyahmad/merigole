@@ -21,13 +21,4 @@
     
     <!-- Main JS -->
     <script src="{{ asset('admin/js/main.js') }}"></script>
-
-
-    <script>
-
-        $(document).ready( function () {
-            $('#invitation_table').DataTable(
-            );
-        });
-
-    </script>
+    <script src="{{ asset('js/main.js') }}"></script>

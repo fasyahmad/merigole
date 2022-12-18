@@ -10,6 +10,17 @@
     <div class="card mb-4">
       <h5 class="card-header">Wedding Couple Detail</h5>
       <div class="card-body">
+        @if ($errors->any())
+        <div class="alert alert-danger alert-dismissible" role="alert">
+          There's something wrong!
+          <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+        @endif
         <form action="{{ route('dashboard.invitation.update', $item->id) }}" method="post" enctype="multipart/form-data">
           <!-- @method('PUT') -->
           {{ method_field('PUT') }}
@@ -24,6 +35,7 @@
                   <div class="mb-3">
                     <label class="form-label" for="quote">Quote</label>
                     <input value="{{ old('quote') ?? $item->quote }}" name="quote" id="quote" type="text" class="form-control" placeholder="John Doe">
+                    <input value="{{ old('catalog_id') ?? $item->catalog_id }}" name="catalog_id" id="catalog_id" type="text" style="display: none" class="form-control" placeholder="John Doe">
                   </div>
                   <div class="mb-3">
                     <label class="form-label" for="nickname_groom">Nickname Groom</label>
@@ -34,12 +46,12 @@
                     <input value="{{ old('full_name_groom') ?? $item->full_name_groom }}" name="full_name_groom" id="full_name_groom" type="text" class="form-control" placeholder="John Doe">
                   </div>
                   <div class="mb-3">
-                    <label for="pics_groom" class="form-label">Default file input example</label>
+                    <label for="pics_groom" class="form-label">Pic's Groom</label>
                     <input value="{{ old('pics_groom') ?? $item->pics_groom }}" name="pics_groom" id="pics_groom" class="form-control" type="file">
                   </div>
                   <img src="{{ Storage::url('invitationMain/'. $item->id . '/' . $item->pics_groom) }}" alt="" style="width:150px" class="img-thumbnail" srcset="">
                   <div class="mb-3">
-                    <label class="form-label" for="ig_groom">IG Groom</label>
+                    <label class="form-label" for="ig_groom">IG's Groom</label>
                     <input value="{{ old('ig_groom') ?? $item->ig_groom }}" name="ig_groom" id="ig_groom" type="text" class="form-control" placeholder="John Doe">
                   </div>
                   <div class="mb-3">
@@ -59,8 +71,8 @@
                     <input style="height: 2.2rem" value="{{ old('background_color') ?? $item->background_color	}}" name="background_color" id="background_color" class="form-control" type="color">
                   </div>
                     <div class="mb-3">
-                      <label class="form-label" for="quote_refererence">Quote Reference</label>
-                      <input value="{{ old('quote_refererence') ?? $item->quote_refererence }}" name="quote" id="quote" type="text" class="form-control" placeholder="John Doe">
+                      <label class="form-label" for="quote_reference">Quote Reference</label>
+                      <input value="{{ old('quote_reference') ?? $item->quote_reference }}" name="quote_reference" id="quote_reference" type="text" class="form-control" placeholder="John Doe">
                     </div>
                     <div class="mb-3">
                       <label class="form-label" for="nickname_bride">Nickname Bride</label>
@@ -71,12 +83,12 @@
                       <input value="{{ old('full_name_bride') ?? $item->full_name_bride }}" name="full_name_bride" id="nickname_bride" type="text" class="form-control" placeholder="John Doe">
                     </div>
                     <div class="mb-3">
-                      <label for="pics_bride" class="form-label">Pics Bride</label>
+                      <label for="pics_bride" class="form-label">Pic's Bride</label>
                       <input value="{{ old('pics_bride') ?? $item->pics_bride }}" name="pics_bride" id="pics_bride" class="form-control" type="file">
                     </div>
-                  <img src="{{ Storage::url('invitationMain/'. $item->id . '/' . $item->pics_bride) }}" alt="" style="width:150px" class="img-thumbnail" srcset="">
-                    <div class="mb-3">
-                      <label class="form-label" for="ig_bride">IG Bride</label>
+                  <img name="" id="" src="{{ Storage::url('invitationMain/'. $item->id . '/' . $item->pics_bride) }}" alt="" style="width:150px" class="img-thumbnail" srcset="">
+                  <div class="mb-3">
+                      <label class="form-label" for="ig_bride">IG's Bride</label>
                       <input value="{{ old('ig_bride') ?? $item->ig_bride }}" name="ig_bride" id="ig_bride" type="text" class="form-control" placeholder="John Doe">
                     </div>
                     <div class="mb-3">
@@ -100,6 +112,7 @@
 
 
   <!-- Wedding Ceremonies & Receptions Place -->
+ 
   <div class="content-wrapper">
     <!-- Content -->
 
@@ -124,6 +137,7 @@
               </p>
               <div class="collapse" id="collapseWeddingPlace">
                 <div class="row">
+                  @if($item->marriageCeremonys != null)  
                   <div class="col-xl">
                     <div class="card mb-4">
                       <div class="card-header d-flex justify-content-between align-items-center">
@@ -152,13 +166,15 @@
                           </div>
                           <div class="mb-3">
                             <label class="form-label" for="address">Address</label>
-                            <textarea value="{{ old('address') ?? $item->marriageCeremonys->address }}" name="address" id="address" class="form-control" placeholder="Hi, Do you have a moment to talk Joe?"></textarea>
+                            <input value="{{ old('address') ?? $item->marriageCeremonys->address }}" name="address" id="place_name" type="text" class="form-control" placeholder="John Doe">
                           </div>
                           <button type="submit" class="btn btn-primary">Update</button>
                         </form>
                       </div>
                     </div>
                   </div>
+                  @endif
+                  @if($item->weddingReceptions != null)  
                   <div class="col-xl">
                     <div class="card mb-4">
                       <div class="card-header d-flex justify-content-between align-items-center">
@@ -187,13 +203,14 @@
                           </div>
                           <div class="mb-3">
                             <label class="form-label" for="address">Address</label>
-                            <textarea value="{{ old('address') ?? $item->weddingReceptions->address }}" name="address" id="address" class="form-control" placeholder="Hi, Do you have a moment to talk Joe?"></textarea>
+                            <input value="{{ old('address') ?? $item->weddingReceptions->address }}" name="address" id="address" type="text" class="form-control" placeholder="John Doe">
                           </div>
                           <button type="submit" class="btn btn-primary">Update</button>
                         </form>
                       </div>
                     </div>
                   </div>
+                  @endif
                 </div>
               </div>
             </div>
@@ -204,7 +221,9 @@
     <!-- / Content -->
   <!-- Wedding Ceremonies & Receptions Place -->
 
+
   <!-- Digital Gifts & Physical Gifts -->
+  
   <div class="content-wrapper">
     <!-- Content -->
     <div class="container-xxl flex-grow-1 container-p-y">
@@ -229,6 +248,7 @@
               <div class="collapse" id="collapseGifts">
                 <div class="row">
                   <div class="col-xl">
+                  @if($digitalGifts != null) 
                     <div class="card mb-4">
                       <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Digital Gifts</h5>
@@ -296,7 +316,9 @@
                         </div>
                       </div>
                     </div>
+                  @endif
                     <hr>
+                  @if($physicalGifts != null) 
                     <div class="card mb-4">
                       <div class="card-header d-flex justify-content-between align-items-center">
                         <h5 class="mb-0">Physical Gifts</h5>
@@ -358,6 +380,7 @@
                         </div>
                       </div>
                     </div>
+                    @endif
                 </div>
                 </div>
               </div>

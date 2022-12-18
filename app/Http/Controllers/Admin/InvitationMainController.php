@@ -3,11 +3,14 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\InvitationMainRequest;
+use App\Models\Catalog;
 use App\Models\DigitalGift;
 use App\Models\Gallery;
 use App\Models\GuestBook;
 use Illuminate\Http\Request;
 use App\Models\InvitationMain;
+use App\Models\MasterCatalog;
 use App\Models\PhysicalGift;
 use App\Models\Rsvp;
 use Illuminate\Support\Facades\Storage;
@@ -15,6 +18,7 @@ use Exception;
 use SebastianBergmann\Environment\Console;
 use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 
 class InvitationMainController extends Controller
 {
@@ -32,11 +36,30 @@ class InvitationMainController extends Controller
         ]);
     }
 
+    public function catalogIndex()
+    {
+        $catalogs = MasterCatalog::all();
+
+        return view('pages.admin.invitation.categoryIndex',[
+            'items' => $catalogs
+        ]);
+    }
+
     /**
      * Show the form for creating a new resource.
      *
      * @return \Illuminate\Http\Response
      */
+    public function createInvitation($id)
+    {
+        //
+        $catalog = MasterCatalog::where('master_catalog_id', $id)->firstOrFail();
+        $test = 'ad';
+        return view('pages.admin.invitation.create',[
+            'item' => $catalog
+        ]);
+    }
+
     public function create()
     {
         //
@@ -49,9 +72,49 @@ class InvitationMainController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(InvitationMainRequest $request)
     {
         //
+        $data = $request->all();
+
+        $currInvitation = InvitationMain::create($data);
+
+        if($request->hasFile('pics_groom')){
+
+            $destination_path = 'public/invitationMain/' . $request->id;
+            $image = $request->file('pics_groom');
+            $image_name = $image->hashName();
+            $path = $request->file('pics_groom')->storeAs($destination_path, $image_name);
+
+            $data['pics_groom'] = $image_name;
+        }
+
+        if($request->hasFile('pics_groom')){
+
+            $destination_path = 'public/invitationMain/' . $request->id;
+            $image = $request->file('pics_groom');
+            $image_name = $image->hashName();
+            $path = $request->file('pics_groom')->storeAs($destination_path, $image_name);
+
+            $data['pics_groom'] = $image_name;
+        }
+
+        $currInvitation->update($data);
+
+        $masterCatalog = MasterCatalog::where('master_catalog_id', $request->catalog_id)->firstOrFail();
+        
+        $catalog = Catalog::create([
+            'user_id' => Auth::user()->id,
+            'catalog_name' => $masterCatalog->master_catalog_name,
+            'catalog_id' => $masterCatalog->master_catalog_id
+        ]);
+
+
+        $invitation = InvitationMain::all();
+
+        return view('pages.admin.invitation.index',[
+            'items' => $invitation
+        ]);
     }
 
     /**
@@ -84,6 +147,8 @@ class InvitationMainController extends Controller
         $rsvps = Rsvp::where('invitation_main_id', $invitation->id)->get();
         $galleries = Gallery::where('invitation_main_id', $invitation->id)->get();
 
+        $cek = $physicalGifts->count() == 0;
+
         // echo $physicalGifts;
         return view('pages.admin.invitation.edit', [
             'item' => $invitationData,
@@ -102,13 +167,11 @@ class InvitationMainController extends Controller
      * @param  \App\Models\InvitationMain  $invitationMain
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, InvitationMain $invitationMain, $id)
+    public function update(InvitationMainRequest $request, InvitationMain $invitationMain, $id)
     {
         //
         $data = $request->all();
         $item = InvitationMain::findOrFail($id);
-
-        
 
        if($request->hasFile('pics_groom')){
 

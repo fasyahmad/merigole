@@ -10,26 +10,11 @@
     <div class="card mb-4">
       <h5 class="card-header">Wedding Couple Detail</h5>
       <div class="card-body">
-        @if ($errors->any())
-        <div class="alert alert-danger alert-dismissible" role="alert">
-          There's something wrong!
-          <ul>
-            @foreach ($errors->all() as $error)
-                <li>{{ $error }}</li>
-            @endforeach
-        </ul>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        @endif
-        <form action="{{ route('dashboard.invitation.store') }}" method="post" enctype="multipart/form-data">
+        <form action="" method="post" enctype="multipart/form-data">
           @csrf
           <div class="row gy-3">
             <div class="col-xl-6">                        
               <div class="card-body">
-                <div class="mb-3">
-                  <label class="form-label" for="quote">Marriage Date</label>
-                  <input value="{{ old('marriage_date') }}" name="marriage_date" id="marriage_date" class="form-control" type="date" >
-                </div>
                   <div class="mb-3">
                     <label class="form-label" for="quote">Quote</label>
                     <input value="{{ old('quote') }}" name="quote" id="quote" type="text" class="form-control" placeholder="John Doe">
@@ -43,36 +28,28 @@
                     <input value="{{ old('full_name_groom') }}" name="full_name_groom" id="full_name_groom" type="text" class="form-control" placeholder="John Doe">
                   </div>
                   <div class="mb-3">
-                    <label for="pics_groom" class="form-label">Pic's Groom</label>
-                    <input value="{{ old('pics_groom') }}" name="pics_groom" id="pics_groom" class="form-control" type="file">
+                    <label class="form-label" for="pics_groom">Pics Groom</label>
+                    <input value="{{ old('pics_groom') }}" name="pics_groom" id="pics_groom" type="text" class="form-control" placeholder="John Doe">
                   </div>
                   <div class="mb-3">
                     <label class="form-label" for="ig_groom">IG Groom</label>
                     <input value="{{ old('ig_groom') }}" name="ig_groom" id="ig_groom" type="text" class="form-control" placeholder="John Doe">
                   </div>
                   <div class="mb-3">
-                    <label class="form-label" for="groom_father">Groom's Father</label>
-                    <input value="{{ old('groom_father') }}" name="groom_father" id="groom_father" type="text" class="form-control" placeholder="John Doe">
+                    <label class="form-label" for="groom_fathe">Groom's Father</label>
+                    <input value="{{ old('groom_fathe') }}" name="groom_fathe" id="groom_fathe" type="text" class="form-control" placeholder="John Doe">
                   </div>
                   <div class="mb-3">
                     <label class="form-label" for="groom_mother">Groom's Mother</label>
                     <input value="{{ old('groom_mother') }}" name="groom_mother" id="groom_mother" type="text" class="form-control" placeholder="John Doe">
-                  </div>
-                  <div class="mb-3">
-                    <label class="form-label" for="catalog_id">Catalog</label>
-                    <input value="{{ old('catalog_id') }}" name="catalog_id" id="catalog_id" type="text" class="form-control" placeholder="John Doe">
                   </div>
               </div>
             </div>
             <div class="col-xl-6">
               <div class="card-body">
                     <div class="mb-3">
-                      <label class="form-label" for="background_color">Background Color</label>
-                      <input style="height: 2.2rem" value="{{ old('background_color') }}" name="background_color" id="background_color" class="form-control" type="color">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label" for="quote_reference">Quote Reference</label>
-                      <input value="{{ old('quote_reference') }}" name="quote_reference" id="quote_reference" type="text" class="form-control" placeholder="John Doe">
+                      <label class="form-label" for="quote_refererence">Quote Reference</label>
+                      <input value="{{ old('quote_refererence') }}" name="quote" id="quote" type="text" class="form-control" placeholder="John Doe">
                     </div>
                     <div class="mb-3">
                       <label class="form-label" for="nickname_bride">Nickname Bride</label>
@@ -83,8 +60,8 @@
                       <input value="{{ old('full_name_bride') }}" name="full_name_bride" id="nickname_bride" type="text" class="form-control" placeholder="John Doe">
                     </div>
                     <div class="mb-3">
-                      <label for="pics_bride" class="form-label">Pic's Bride</label>
-                      <input value="{{ old('pics_bride') }}" name="pics_bride" id="pics_bride" class="form-control" type="file">
+                      <label class="form-label" for="pics_bride">Pics Bride</label>
+                      <input value="{{ old('pics_bride') }}" name="pics_bride" id="pics_bride" type="text" class="form-control" placeholder="John Doe">
                     </div>
                     <div class="mb-3">
                       <label class="form-label" for="ig_bride">IG Bride</label>
@@ -98,15 +75,7 @@
                       <label class="form-label" for="bride_mother">Bride's Mothe</label>
                       <input value="{{ old('bride_mother') }}" name="bride_mother" id="bride_mother" type="text" class="form-control" placeholder="John Doe">
                     </div>
-                    <div class="mb-3">
-                      <label class="form-label" for="master_catalog_name">Catalog Id</label>
-                      {{-- <input value="{{ $item->master_catalog_name ?? old('master_catalog_name') }}" name="master_catalog_name" id="master_catalog_name" type="text" class="form-control" placeholder="John Doe"> --}}
-                      <input value="{{ $item->master_catalog_id ?? old('master_catalog_id') }}" name="master_catalog_id" id="master_catalog_id" type="text" class="form-control" placeholder="John Doe">
-                    </div>
-                    <div class="mb-3">
-                      <label class="form-label" for="bride_mother"> </label>
-                      <button type="submit" class="btn btn-primary form-control " >Update</button>
-                    </div>
+                    <button type="submit" class="btn btn-primary">Update</button>
                 </div>
               </div>
             </div>

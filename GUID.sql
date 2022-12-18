@@ -3,7 +3,7 @@ instal jetstream
 instal yajra dataTable
 
 bikin model
-php artisan make:model Catalog
+- php artisan make:model Catalog
 nambahin field baru ke dataTable
 - php artisan make:migration add_field_to_users --table=users
 create table
@@ -12,3 +12,7 @@ create API controller
 - php artisan make:controller API\Gallery
 create controller wirh source
 -php artisan make:controller UserController --resource --model=User
+
+create request 
+-php artisan make:request Admin/CreateUserRequest 
+-php artisan make:request InvitationMainRequest 
